@@ -1,0 +1,30 @@
+#!/bin/bash
+
+version: "3.3"
+services:
+  db:
+    image: postgres:13.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "gp_practice_data"
+      POSTGRES_USER: "ifedayo"
+      POSTGRES_PASSWORD: "lovex"
+    ports:
+       - "5432:5432"
+    volumes:
+        - type: "bind"
+         source: "$HOME/docker/volumes/postgres"
+         target: "/var/lib/postgresql/data"
+  rstudio:
+    image: hatmatrix/blog:base
+    ports:
+      - "8787:8787"
+      - "3838:3838"
+    environment:
+      DISABLE_AUTH: "true"
+    volumes:
+      - types: "bind"
+        source: "$HOME/gp_practice/rstudio"
+        target: "/home/rstudio/source"
+  depends_on:
+    - "db"
