@@ -26,20 +26,8 @@ docker run --rm --name post_setup \
 
 # wait for the postgress service to be ready 
 
-if ! command -v timeout &> /dev/null
-then
-    echo "`timeout` could not be found.
-    exit
-fi
-
-timeout 20s bash -c "until docker exec post_setup pg_isready; do sleep 1; done"
-
-# Create a new role and two databases
-
-echo " CREATE ROLE ifedayo WITH PASSWORD 'lovex' CREATEDB LOGIN;
-CREATE DATABASE gp_practice_data; CREATE DATABASE protein;" | \
-docker exec -i post_setup \ 
+echo "CREATE DATABASE single_cell; CREATE DATABASE protein;" | \
+docker exec -i post_setup \
 psql -U postgres
 
-#stop the docker conatiner 
 docker stop post_setup
